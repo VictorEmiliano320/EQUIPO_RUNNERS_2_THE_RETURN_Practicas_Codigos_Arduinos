@@ -1,0 +1,22 @@
+void setup() {
+  Serial.begin(9600); // Inicializa el puerto serial
+}
+
+void loop() {
+  // Leer los seis pines analógicos (A0–A5)
+  int valores[6];
+  for (int i = 0; i < 6; i++) {
+    valores[i] = analogRead(i); // Lee cada pin analógico
+  }
+
+  // Imprimir los valores en formato binario
+  Serial.println("Lecturas en binario:");
+  for (int i = 0; i < 6; i++) {
+    Serial.print("A");
+    Serial.print(i);
+    Serial.print(": ");
+    Serial.println(valores[i]*4.88, DEC); // Convierte la salida a binario
+  }
+
+  delay(1000); // Espera 1000  milisegundos 
+}
