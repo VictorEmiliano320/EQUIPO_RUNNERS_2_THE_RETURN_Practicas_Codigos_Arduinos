@@ -1,0 +1,31 @@
+// Pin donde está conectado el LED (ver la imagen)
+const int ledPin = 6;
+// Pin analógico donde está conectado el potenciómetro
+const int potPin = A0;
+
+void setup() {
+  // Configuramos el pin del LED como salida
+  //pinMode(ledPin, OUTPUT);
+  // Inicializamos el monitor serial para observar los valores
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Leemos el valor del potenciómetro (0–1023)
+  int potValue = analogRead(potPin);
+
+  // Convertimos ese valor al rango PWM (0–255) (MAPEO)
+  int pwmValue = map(potValue, 0, 1023, 0, 255);
+
+  // Aplicamos el valor PWM al LED
+  analogWrite(ledPin, pwmValue);
+
+  // Mostramos los valores en el monitor serial
+  Serial.print("Potenciómetro: ");
+  Serial.print(potValue);
+  Serial.print(" -> PWM: ");
+  Serial.println(pwmValue);
+
+  // Pequeña pausa para darle tiempo al convertidor (ADC-DAC)
+  delay(50);
+}
