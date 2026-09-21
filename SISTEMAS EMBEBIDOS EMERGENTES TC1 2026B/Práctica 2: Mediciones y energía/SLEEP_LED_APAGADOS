@@ -1,0 +1,71 @@
+#include <avr/sleep.h>
+#include <avr/power.h>
+
+#define NUM_LEDS 8
+
+const byte pinesLED[NUM_LEDS] = {2, 3, 4, 5, 6, 7, 8, 9};
+
+void apagarPerifericos() {
+  // Desactiva módulos que no se utilizan
+  power_adc_disable();
+  power_spi_disable();
+  power_twi_disable();
+  power_timer1_disable();
+  power_timer2_disable();
+
+  // Solo descomentar si no utilizas Serial
+  // power_usart0_disable();
+}
+
+void configurarSleep() {
+  // Configura el modo de sueño más profundo
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+
+  // Habilita el modo sleep
+  sleep_enable();
+}
+
+void apagarLEDs() {
+  for (int i = 0; i < NUM_LEDS; i++) {
+    digitalWrite(pinesLED[i], LOW);
+  }
+}
+
+void entrarSleep() {
+
+  // Apaga todos los LEDs antes de dormir
+  apagarLEDs();
+
+  // Desactiva periféricos
+  apagarPerifericos();
+
+  // Entra al modo sleep
+  sleep_cpu();
+
+  // Esta parte solo se ejecuta si el Arduino despierta
+  sleep_disable();
+}
+
+void setup() {
+
+  // Configura todos los pines como salida
+  for (int i = 0; i < NUM_LEDS; i++) {
+    pinMode(pinesLED[i], OUTPUT);
+
+    // Primero enciende los LEDs
+    digitalWrite(pinesLED[i], HIGH);
+  }
+
+  // Deja los LEDs encendidos durante 5 segundos
+  // para comprobar que funcionan
+  delay(5000);
+
+  // Configura el modo sleep
+  configurarSleep();
+}
+
+void loop() {
+
+  // Apaga los LEDs y pone al Arduino en sleep
+  entrarSleep();
+}
