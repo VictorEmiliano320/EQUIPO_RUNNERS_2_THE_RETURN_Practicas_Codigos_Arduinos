@@ -1,0 +1,11 @@
+// Programa: Lectura de pin 2 y reflejo en pin 13
+
+void setup() {
+  pinMode(2, INPUT);      // Configura el pin 2 como entrada digital
+  pinMode(13, OUTPUT);    // Configura el pin 13 como salida digital
+}
+
+void loop() {
+  int valor = digitalRead(2);   // Lee el estado del pin 2 (HIGH o LOW)
+  digitalWrite(13, valor);      // Escribe ese mismo valor en el pin 13
+}
