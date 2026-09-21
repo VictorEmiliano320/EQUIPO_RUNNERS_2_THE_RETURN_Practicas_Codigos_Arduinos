@@ -1,0 +1,65 @@
+#include <avr/sleep.h>
+#include <avr/power.h>
+
+#define NUM_LEDS 8
+
+const byte pinesLED[NUM_LEDS] = {2, 3, 4, 5, 6, 7, 8, 9};
+
+void apagarPerif() {
+
+  // Se desactivan los módulos que no se usan para ahorrar energía
+  power_adc_disable();
+  power_spi_disable();
+  power_twi_disable();
+  power_timer1_disable();
+  power_timer2_disable();
+
+  // Descomentar solamente si no se utiliza Serial
+  // power_usart0_disable();
+}
+
+void configSleep() {
+
+  // Modo de sueño más profundo para mayor ahorro de energía
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+
+  // Habilita el modo sleep
+  sleep_enable();
+}
+
+void entrarSleep() {
+
+  // El Arduino entra en modo sleep
+  sleep_cpu();
+
+  // Esta parte se ejecuta cuando el Arduino despierta
+  sleep_disable();
+
+  // Vuelve a desactivar periféricos
+  apagarPerif();
+}
+
+void setup() {
+
+  // Configura y enciende los 8 LEDs
+  for (int i = 0; i < NUM_LEDS; i++) {
+
+    pinMode(pinesLED[i], OUTPUT);
+
+    digitalWrite(pinesLED[i], HIGH);
+  }
+
+  // Desactiva periféricos innecesarios
+  apagarPerif();
+
+  // Configura el modo sleep
+  configSleep();
+}
+
+void loop() {
+
+  // Permanece en modo sleep hasta que ocurra una interrupción
+  entrarSleep();
+
+  // Aquí se podrían realizar otros procesos al despertar
+}
