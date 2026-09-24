@@ -1,0 +1,42 @@
+const int ledPin = 6;
+const int fotoPin = A0;
+
+void setup() {
+
+  pinMode(ledPin, OUTPUT);
+
+  Serial.begin(9600);
+}
+
+void loop() {
+
+  // Lectura de la fotorresistencia: 0 - 1023
+  int luzValue = analogRead(fotoPin);
+
+  // Conversión a porcentaje: 0 - 100
+  int porcentajeLuz = map(luzValue, 0, 1023, 0, 100);
+
+  // Conversión para PWM: 0 - 255
+  int pwmValue = map(luzValue, 0, 1023, 0, 255);
+
+  analogWrite(ledPin, pwmValue);
+
+  Serial.print("Luz: ");
+  Serial.print(luzValue);
+
+  Serial.print(" | Porcentaje: ");
+  Serial.print(porcentajeLuz);
+  Serial.print("%");
+
+  if (porcentajeLuz <= 50) {
+
+    Serial.println(" | Es de Noche");
+
+  } else {
+
+    Serial.println(" | Es de Dia");
+
+  }
+
+  delay(1200);
+}
